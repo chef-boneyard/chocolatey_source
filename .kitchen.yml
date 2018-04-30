@@ -13,7 +13,7 @@ provisioner:
   deprecations_as_errors: true
 
 verifier:
-  name: pester
+  name: inspec
 
 platforms:
   - name: windows-8.1

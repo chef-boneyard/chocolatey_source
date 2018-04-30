@@ -1,0 +1,1 @@
+chocolatey_source 'MySource'
