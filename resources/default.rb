@@ -24,12 +24,6 @@ property :source, String
 property :bypass_proxy, [TrueClass, FalseClass], default: false
 property :priority, Integer, default: 0
 
-# a few properties to add later
-# property :user, String
-# property :password, String
-# property :cert, String
-# property :cert_password, String
-
 load_current_value do
   require 'rexml/document'
   element = fetch_source_element(source_name)
@@ -41,6 +35,7 @@ load_current_value do
   priority element['priority'].to_i
 end
 
+# @param [String] id the source name
 # @return [REXML::Attributes] finds the source element with the
 def fetch_source_element(id)
   config_file = 'C:\ProgramData\chocolatey\config\chocolatey.config'
@@ -76,11 +71,13 @@ end
 # end
 
 action_class do
+  # @param [String] action the name of the action to perform
+  # @return [String] the choco source command string
   def choco_cmd(action)
     cmd = "choco source #{action} -n \"#{new_resource.source_name}\""
     if action == 'add'
       cmd << " -s #{new_resource.source} --priority=#{new_resource.priority}"
-      cmd << " --bypassproxy" if new_resource.bypass_proxy
+      cmd << ' --bypassproxy' if new_resource.bypass_proxy
     end
     cmd
   end
