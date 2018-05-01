@@ -64,13 +64,13 @@ action :remove do
   end
 end
 
-action :enable do
-  shell_out!(choco_cmd('enable'))
-end
-
-action :disable do
-  shell_out!(choco_cmd('disable')) if current_resource
-end
+# action :enable do
+#   shell_out!(choco_cmd('enable'))
+# end
+#
+# action :disable do
+#   shell_out!(choco_cmd('disable')) if current_resource
+# end
 
 action_class do
   def choco_cmd(action)
