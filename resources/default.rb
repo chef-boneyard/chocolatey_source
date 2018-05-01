@@ -74,7 +74,7 @@ action_class do
   # @param [String] action the name of the action to perform
   # @return [String] the choco source command string
   def choco_cmd(action)
-    cmd = "choco source #{action} -n \"#{new_resource.source_name}\""
+    cmd = "C:\\ProgramData\\chocolatey\\bin\\choco source #{action} -n \"#{new_resource.source_name}\""
     if action == 'add'
       cmd << " -s #{new_resource.source} --priority=#{new_resource.priority}"
       cmd << ' --bypassproxy' if new_resource.bypass_proxy
