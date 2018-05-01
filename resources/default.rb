@@ -29,29 +29,53 @@ property :source, String
 # property :cert_password, String
 # property :bypass_proxy, [TrueClass, FalseClass]
 
+load_current_value do
+  require 'rexml/document'
+  element = fetch_source_element(source_name)
+  current_value_does_not_exist! if element.nil?
+
+  source_name element['id']
+  source element['value']
+end
+
+# @return [REXML::Attributes] finds the source element with the
+def fetch_source_element(id)
+  config_file = 'C:\ProgramData\chocolatey\config\chocolatey.config'
+  raise "Could not find the Chocolatey config at #{config_file}!" unless ::File.exist?(config_file)
+
+  config_contents = REXML::Document.new(::File.read(config_file))
+  data = REXML::XPath.first(config_contents, "//sources/source[@id=\"#{id}\"]")
+  data ? data.attributes : nil # REXML just returns nil if it can't find anything so avoid an undefined method error
+end
+
 action :add do
   raise "#{new_resource}: When adding a Chocolatey source you must pass the 'source' property!" unless new_resource.source
 
-  execute choco_cmd('add')
+  converge_if_changed do
+    shell_out!(choco_cmd('add'))
+  end
 end
 
 action :remove do
-  execute choco_cmd('remove')
+  if current_resource
+    converge_by("remove Chocolatey source '#{new_resource.source_name}'") do
+      shell_out!(choco_cmd('remove'))
+    end
+  end
 end
 
 action :enable do
-  execute choco_cmd('enable')
+  shell_out!(choco_cmd('enable'))
 end
 
 action :disable do
-  execute choco_cmd('disable')
+  shell_out!(choco_cmd('disable')) if current_resource
 end
 
 action_class do
   def choco_cmd(action)
-    cmd = "choco source #{action} -n #{new_resource.source_name}"
-    if action == 'add'
-     cmd << " -s #{new_resource.source}"
-    end
+    cmd = "choco source #{action} -n \"#{new_resource.source_name}\""
+    cmd << " -s #{new_resource.source}" if action == 'add'
+    cmd
   end
 end
