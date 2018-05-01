@@ -31,6 +31,8 @@ Provides a chocolatey_source resource for managing Chocolatey sources.
 
 - `source_name` - Name property. The name of the source.
 - `source` - the path to the source (filesystem or URL)
+- `bypass_proxy` - should the system proxy be bypassed for this source (default: false)
+- `priority` - the priority level for the source (default: 0)
 
 #### Examples
 

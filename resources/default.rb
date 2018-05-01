@@ -21,13 +21,14 @@ resource_name :chocolatey_source
 
 property :source_name, String, name_property: true
 property :source, String
+property :bypass_proxy, [TrueClass, FalseClass], default: false
+property :priority, Integer, default: 0
 
 # a few properties to add later
 # property :user, String
 # property :password, String
 # property :cert, String
 # property :cert_password, String
-# property :bypass_proxy, [TrueClass, FalseClass]
 
 load_current_value do
   require 'rexml/document'
@@ -36,6 +37,8 @@ load_current_value do
 
   source_name element['id']
   source element['value']
+  bypass_proxy element['bypassProxy'] == 'true' ? true : false
+  priority element['priority'].to_i
 end
 
 # @return [REXML::Attributes] finds the source element with the
@@ -75,7 +78,10 @@ end
 action_class do
   def choco_cmd(action)
     cmd = "choco source #{action} -n \"#{new_resource.source_name}\""
-    cmd << " -s #{new_resource.source}" if action == 'add'
+    if action == 'add'
+      cmd << " -s #{new_resource.source} --priority=#{new_resource.priority}"
+      cmd << " --bypassproxy" if new_resource.bypass_proxy
+    end
     cmd
   end
 end
