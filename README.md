@@ -56,9 +56,8 @@ end
 Removing a source
 
 ```ruby
-chocolatey_source 'Add my_corp Chocolatey Source' do
-  source_name 'my_corp_source'
-  source 'http://mycorp.dmz/choco_path/'
+chocolatey_source 'my_corp_source' do
+  action :remove
 end
 ```
 
