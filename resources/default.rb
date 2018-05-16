@@ -31,7 +31,7 @@ load_current_value do
 
   source_name element['id']
   source element['value']
-  bypass_proxy element['bypassProxy'] == 'true' ? true : false
+  bypass_proxy element['bypassProxy'] == 'true'
   priority element['priority'].to_i
 end
 
