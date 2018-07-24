@@ -4,6 +4,8 @@
 
 Provides a chocolatey_source resource for managing Chocolatey sources.
 
+NOTE: This resource shipped in Chef 14.3
+
 ## Requirements
 
 ### Platforms
