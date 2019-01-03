@@ -4,7 +4,11 @@
 
 Provides a chocolatey_source resource for managing Chocolatey sources.
 
-NOTE: This resource shipped in Chef 14.3. This cookbook will be deprecated in April, 2019 when Chef 15.0 is released.
+## Deprecation
+
+This resource shipped in Chef 14.3 and as such this cookbook is no longer maintained. It will continue to function for users of Chef 13.0 - 14.2, but there will be no updates made.
+
+---
 
 ## Requirements
 
